@@ -5,6 +5,7 @@ echo ^@panscanned, github.com/joeavanzato
 echo -------------------------------
 echo ------ SYSTEM INFORMATION ------
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+wmic os get osarchitecture || echo %PROCESSOR_ARCHITECTURE% #Get system architecture
 echo ------ HOSTNAME ------
 hostname
 echo ------ USERNAME / PRIVILEGES------
@@ -77,5 +78,19 @@ IF EXIST %WINDIR%\Panther\Unattended.xml  ECHO %WINDIR%\Panther\Unattended.xml f
 echo -----------------------------------------------------
 echo ------ INTERESTING FILES ------
 dir /s *pass* == *cred* == *vnc* == *.config*
-findstr /si password \*.xml \*.ini \*.txt
+Rem echo ----- VERY NOISY ------
+Rem #VERY NOISY - findstr /si password \*.xml \*.ini \*.txt
+echo -----------------------------------------------------
+echo ------ PROXY CONFIGURATION AND CONNECTIVITY CHECKS ------
+netsh winhttp show proxy
+echo ------ ICMP PING CHECK ------
+ping 8.8.8.8
+echo ------ DNS RESOLUTION CHECK ------
+nslookup cnn.com
+nslookup reddit.com
+nslookup youtube.com
+nslookup github.com
+echo ------ FIREWALL RULE DUMP ------
+netsh advfirewall firewall show rule name=all
+
 )
