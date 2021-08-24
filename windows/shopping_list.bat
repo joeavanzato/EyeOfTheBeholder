@@ -1,7 +1,7 @@
 @echo off
 >shopping_changes.txt (
 echo SHOPPING LIST V1
-echo ^@panscanned, github.com/joeavanzato
+echo ^@panscanned, github.com/joeavanzato/EyeOfTheBeholder/
 echo -------------------------------
 echo ------ SYSTEM INFORMATION ------
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
