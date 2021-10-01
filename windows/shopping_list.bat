@@ -1,21 +1,35 @@
 @echo off
 >shopping_changes.txt (
 echo SHOPPING LIST V1
-echo ^@panscanned, github.com/joeavanzato/EyeOfTheBeholder/
+echo ^@panscanned, github.com/joeavanzato
 echo -------------------------------
 echo ------ SYSTEM INFORMATION ------
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
 wmic os get osarchitecture || echo %PROCESSOR_ARCHITECTURE% #Get system architecture
 echo ------ HOSTNAME ------
 hostname
-echo ------ USERNAME / PRIVILEGES------
+echo ------ USERNAME / PRIVILEGES ------
 echo CHECK FOR SeAssignPrimaryTokenPrivilege SeImpersonatePrivilege
 echo %username%
 whoami /all
+echo ------ ACTIVE SESSIONS ------
+qwinsta
+klist sessions
 echo ------ LOCAL USERS ------
 net users
-echo ------ LOCAL GROUPS   ------
+echo ------ HOME DIRS ------
+dir c:\users
+echo ------ PASSWORD POLICY ------
+net accounts
+echo ------ ACTIVE CLIPBOARD CONTENT ------
+powershell -command "Get-Clipboard"
+echo ------ LOCAL GROUPS ------
 net localgroup
+net localgroup Administrators
+echo -----------------------------------------------------
+echo ------ WINDOWS UPDATE SERVICES ------
+echo LOOK FOR AN INTERNAL SERVER THEN CHECK "HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate\AU /v UseWUServer"=1
+reg query HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate /v WUServer
 echo -----------------------------------------------------
 echo ------ HOTFIX INFORMATION ------
 wmic qfe get Caption,Description,HotFixID,InstalledOn
@@ -92,5 +106,61 @@ nslookup youtube.com
 nslookup github.com
 echo ------ FIREWALL RULE DUMP ------
 netsh advfirewall firewall show rule name=all
+echo -----------------------------------------------------
+echo ------ AD FOREST INFORMATION ------
+powershell [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
+echo -----------------------------------------------------
+echo ------ AD DOMAIN INFORMATION ------
+powershell [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+powershell ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships()
+powershell [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GlobalCatalogs
+
+echo LOLBAS CHECKER
+at /?  >nul 2>&1 && echo AT Exists
+bitsadmin /?  >nul 2>&1 && echo BITSAdmin Exists
+certreq -?  >nul 2>&1 && echo CertReq Exists
+certutil -?  >nul 2>&1 && echo CertUtil Exists
+cmdkey /list >nul 2>&1 && echo CmdKey Exists
+cmstp.exe /ni /s >nul 2>&1 && echo Cmstp Exists
+cscript >nul 2>&1 && echo CScript Exists
+Desktopimgdownldr >nul 2>&1 && echo Desktopimgdownldr Exists
+Dllhost >nul 2>&1 && echo Dllhost Exists
+dnscmd >nul 2>&1 && echo DNSCmd Exists
+esentutl /y "c:\Program Files (x86)\Internet Explorer\iexplore.exe" >nul 2>&1 && echo Esentutl Exists && del iexplore.exe
+expand /? >nul 2>&1 && echo Expand Exists
+extrac32 >nul 2>&1 && echo Extrac32 Exists
+findstr /? >nul 2>&1 && echo Findstr Exists
+Forfiles /? >nul 2>&1 && echo Forfiles Exists
+ftp /? quit >nul 2>&1 && echo ftp Exists
+gpscript /? >nul 2>&1 && echo gpscript Exists
+hh -decompile >nul 2>&1 && echo hh Exists
+ie4uinit -BaseSettings >nul 2>&1 && echo ie4uinit Exists
+makecab /? >nul 2>&1 && echo makecab Exists
+Rem mavinject /? >nul 2>&1 && echo mavinject Exists
+mmc /? >nul 2>&1 && echo mmc Exists
+Rem msconfig /? >nul 2>&1 && echo msconfig Exists
+Rem msdt /? >nul 2>&1 && echo msdt Exists
+mshta /? >nul 2>&1 && echo mshta Exists
+Rem msiexec >nul 2>&1 && echo msiexec Exists
+netsh add ? >nul 2>&1 && echo netsh Exists
+odbcconf /H /S ? >nul 2>&1 && echo odbcconf Exists
+Rem ##
+Rem pcalua
+Rem pcwrun
+pktmon help >nul 2>&1 && echo pktmon Exists
+pnputil /? >nul 2>&1 && echo pnputil Exists
+Rem presentationhost
+print /? >nul 2>&1 && echo print Exists
+Rem psr
+Rem rasautou -f s >nul 2>&1 && echo rasautou Exists
+reg /? >nul 2>&1 && echo reg Exists
+regini /? >nul 2>&1 && echo regini Exists
+register-cimprovider -help >nul 2>&1 && echo register-cimprovider Exists
+Rem replace
+rpcping /? >nul 2>&1 && echo rpcping Exists
+rundll32 >nul 2>&1 && echo rundll32 Exists
+runonce >nul 2>&1 && echo runonce Exists
+sc query >nul 2>&1 && echo sc query Exists
+schtasks >nul 2>&1 && echo schtasks Exists
 
 )
